@@ -30,7 +30,10 @@ apple_pos = on_grid_random()
 apple = pygame.Surface((10,10))
 apple.fill((255,0,0))
 
-while True:
+score = 0
+
+game_over = False
+while not game_over:
     clock.tick(20)
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -49,6 +52,14 @@ while True:
     if collision(snake[0],apple_pos):
         apple_pos = on_grid_random()
         snake.append((0,0))
+        score = score + 1
+
+    if snake[0][0] == 600 or snake [0][1] == 600 or snake[0][0] == <0 or snake[0][1] <0:
+        game_over = True
+        break
+
+    if game_over:
+        break
 
     if my_direction == UP:
         snake[0] = (snake[0][0], snake[0][1] - 10)
@@ -62,8 +73,12 @@ while True:
     for i in range(len(snake)-1,0,-1):
         snake[i] = snake[i-1][0], snake[i-1][1]
 
+    score_font = font.render('Score: %s' % (score),True,(255,255,255))
+    
+
     screen.fill((0,0,0))
     screen.blit(apple,apple_pos)
+
     for pos in snake:
         screen.blit(sn_skin,pos)
 
