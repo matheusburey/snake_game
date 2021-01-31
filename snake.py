@@ -1,4 +1,4 @@
-import pygame, random
+import pygame , random
 from pygame.locals import *
 
 def on_grid_random():
@@ -14,30 +14,30 @@ RIGHT = 1
 DOWN = 2
 LEFT = 3
 
-pygame.init()
-screen = pygame.display.set_mode((600,600))
-pygame.display.set_caption('snake')
+pygame .init()
+screen = pygame .display.set_mode((600,600))
+pygame .display.set_caption('snake')
 
-snake = [(200,200),(210,200),(220,200)]
-sn_skin = pygame.Surface((10,10))
+snake = [(200, 200), (210,200),(220,200)]
+sn_skin = pygame .Surface((10,10))
 sn_skin.fill((255,255,255))
+apple_pos = on_grid_random()
+apple = pygame .Surface((10,10))
+apple.fill((255,0,0))
 
 my_direction = LEFT
 
-clock = pygame.time.Clock()
+clock = pygame .time.Clock()
 
-apple_pos = on_grid_random()
-apple = pygame.Surface((10,10))
-apple.fill((255,0,0))
-
+font = pygame .font.Font('freesansbold.ttf', 18)
 score = 0
 
 game_over = False
 while not game_over:
     clock.tick(20)
-    for event in pygame.event.get():
+    for event in pygame .event.get():
         if event.type == QUIT:
-            pygame.quit()
+            pygame .quit()
         
         if event.type == KEYDOWN:
             if event.key == K_UP :
@@ -54,7 +54,7 @@ while not game_over:
         snake.append((0,0))
         score = score + 1
 
-    if snake[0][0] == 600 or snake [0][1] == 600 or snake[0][0] == <0 or snake[0][1] <0:
+    if snake[0][0] == 600 or snake [0][1] == 600 or snake[0][0] <0 or snake[0][1] <0:
         game_over = True
         break
 
@@ -72,14 +72,25 @@ while not game_over:
 
     for i in range(len(snake)-1,0,-1):
         snake[i] = snake[i-1][0], snake[i-1][1]
-
-    score_font = font.render('Score: %s' % (score),True,(255,255,255))
     
-
     screen.fill((0,0,0))
     screen.blit(apple,apple_pos)
+
+    score_font = font.render('score: %s' % (score), True, (155,255,255))
+    score_rect = score_font.get_rect()
+    score_rect.topleft = (600 - 120, 10)
+    screen.blit(score_font, score_rect)
 
     for pos in snake:
         screen.blit(sn_skin,pos)
 
+    pygame .display.update()
+
+while True:
+    game_over_font = pygame.font.Font('freesansbold.ttf',75)
+    game_over_screen = game_over_font.render('GAME OVER', True, (255,255,255))
+    game_over_rect= game_over_screen.get_rect()
+    game_over_rect.midtop = (600 / 2, 10)
+    screen.blit(game_over_screen, game_over_rect)
     pygame.display.update()
+    pygame.time.wait(500)
