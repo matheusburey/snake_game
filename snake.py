@@ -69,14 +69,16 @@ while not game_over:
     for i in range(len(snake)-1,0,-1):
         snake[i] = (snake[i-1][0], snake[i-1][1])
     
+    snake.pop()
+
     if my_direction == UP:
-        snake[0] = (snake[0][0], snake[0][1] - 10)
+        snake.insert(0,  (snake[0][0], snake[0][1] - 10))
     if my_direction == DOWN:
-        snake[0] = (snake[0][0], snake[0][1] + 10)
+        snake.insert(0, (snake[0][0], snake[0][1] + 10))
     if my_direction == RIGHT:
-        snake[0] = (snake[0][0] +10, snake[0][1])
+        snake.insert(0, (snake[0][0] +10, snake[0][1]))
     if my_direction == LEFT:
-        snake[0] = (snake[0][0] -10, snake[0][1])
+        snake.insert(0, (snake[0][0] -10, snake[0][1]))
 
     screen.fill((0,0,0))
     screen.blit(apple,apple_pos)
