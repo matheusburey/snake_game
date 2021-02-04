@@ -59,9 +59,16 @@ while not game_over:
         game_over = True
         break
 
+    if snake[0] in snake[1:]:
+        game_over = True
+        break
+
     if game_over:
         break
 
+    for i in range(len(snake)-1,0,-1):
+        snake[i] = (snake[i-1][0], snake[i-1][1])
+    
     if my_direction == UP:
         snake[0] = (snake[0][0], snake[0][1] - 10)
     if my_direction == DOWN:
@@ -71,9 +78,6 @@ while not game_over:
     if my_direction == LEFT:
         snake[0] = (snake[0][0] -10, snake[0][1])
 
-    for i in range(len(snake)-1,0,-1):
-        snake[i] = (snake[i-1][0], snake[i-1][1])
-    
     screen.fill((0,0,0))
     screen.blit(apple,apple_pos)
 
@@ -85,12 +89,13 @@ while not game_over:
     for pos in snake:
         screen.blit(sn_skin,pos)
 
-    pygame .display.update()
+    pygame.display.update()
 
 while True:
     game_over_font = pygame.font.Font('freesansbold.ttf',75)
     game_over_screen = game_over_font.render('GAME OVER', True, (255,255,255))
     game_over_rect= game_over_screen.get_rect()
+    game_over_rect.midtop = (600/2,100)
     screen.blit(game_over_screen, game_over_rect)
     pygame.display.update()
     pygame.time.wait(500)
@@ -98,4 +103,4 @@ while True:
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
-                exit
+                exit()
