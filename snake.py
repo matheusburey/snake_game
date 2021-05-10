@@ -1,21 +1,47 @@
 import pygame
-import funcoes
+from random import randint
 from pygame.locals import *
 
+
+# funçoes
+# Retorna Posição aleatoria para maçã 
+def on_grid_random():
+    x = randint(0, 59)
+    y = randint(0, 59)
+    return x * 10, y * 10
+
+
+# Verifiva colisão
+def collision(c1, c2):
+    return (c1[0] == c2[0]) and (c1[1] == c2[1])
+
+
+# Desenha a cobra na tela
+def print_snake(snake):
+    screen.fill((0, 12, 0))
+    for po in snake:
+        pygame.draw.rect(screen, white, [po[0], po[1], 10, 10])
+
+
+# Desenha a maçã na tela
+def print_aplle():
+        pygame.draw.rect(screen, red, [apple_pos[0], apple_pos[1], 10, 10])
+
+
 # Inicia o game
-pygame .init()  # inicio o pygame
+pygame.init()  # inicio o pygame
 screen = pygame.display.set_mode((600, 600))  # Tamanho da tela
 pygame.display.set_caption('snake')  # Etiqueta do game
 
 # Snake
 snake = [(200, 200), (210, 200), (220, 200)]  # Cobra inicial
 sn_skin = pygame.Surface((10, 10))  # Tamanho de cada quadrado da cobra
-sn_skin.fill((255, 255, 255))  # cor da cobra
+white = ((255, 255, 255))  # cor da cobra
 
 # maça
-apple_pos = funcoes.on_grid_random()  # Calcula localização aleatoria
-apple = pygame.Surface((10, 10))  # Tamanho da maça
-apple.fill((255, 0, 0))  # Cor da maça
+apple_pos = on_grid_random()  # Calcula localização aleatoria
+apple = pygame.Surface((10, 10))  # Tamanho da maçã
+red = ((255, 0, 0))  # Cor da maçã
 
 # Direção
 UP = 0
@@ -30,6 +56,9 @@ score = 0   # Pontuaçao
 while True:
     pygame.display.update()
     clock.tick(10)
+    
+    print_snake(snake)
+    print_aplle()
 
     for event in pygame .event.get():
         if event.type == QUIT:
@@ -44,8 +73,8 @@ while True:
             if event.key == K_RIGHT:
                 my_direction = RIGHT
 
-    if funcoes.collision(snake[0], apple_pos):
-        apple_pos = funcoes.on_grid_random()
+    if collision(snake[0], apple_pos):
+        apple_pos = on_grid_random()
         snake.append((0, 0))
         score += 1
 
@@ -69,16 +98,10 @@ while True:
     if my_direction == LEFT:
         snake.insert(0, (snake[0][0] - 10, snake[0][1]))
 
-    screen.fill((0, 12, 0))
-    screen.blit(apple, apple_pos)
-
     score_font = font.render('score: %s' % score, True, (155, 255, 255))
     score_rect = score_font.get_rect()
     score_rect.topleft = (600 - 120, 10)
     screen.blit(score_font, score_rect)
-
-    for pos in snake:
-        screen.blit(sn_skin, pos)
 
 while True:
     game_over_font = pygame.font.Font('freesansbold.ttf', 75)
