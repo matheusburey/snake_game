@@ -28,6 +28,23 @@ def print_aplle():
         pygame.draw.rect(screen, red, [apple_pos[0], apple_pos[1], 10, 10])
 
 
+#Verifica tecla clicada
+def click_key(key, my_direction):
+    for event in key:
+        if event.type == QUIT:
+            pygame.quit()
+        if event.type == KEYDOWN:
+            if event.key == K_UP:
+                my_direction = UP
+            if event.key == K_DOWN:
+                my_direction = DOWN
+            if event.key == K_LEFT:
+                my_direction = LEFT
+            if event.key == K_RIGHT:
+                my_direction = RIGHT
+    return my_direction
+
+
 # Inicia o game
 pygame.init()  # inicio o pygame
 screen = pygame.display.set_mode((600, 600))  # Tamanho da tela
@@ -60,18 +77,7 @@ while True:
     print_snake(snake)
     print_aplle()
 
-    for event in pygame .event.get():
-        if event.type == QUIT:
-            pygame.quit()
-        if event.type == KEYDOWN:
-            if event.key == K_UP:
-                my_direction = UP
-            if event.key == K_DOWN:
-                my_direction = DOWN
-            if event.key == K_LEFT:
-                my_direction = LEFT
-            if event.key == K_RIGHT:
-                my_direction = RIGHT
+    my_direction = click_key(pygame.event.get(), my_direction)
 
     if collision(snake[0], apple_pos):
         apple_pos = on_grid_random()
