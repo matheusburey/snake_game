@@ -45,6 +45,17 @@ def click_key(key, my_direction):
     return my_direction
 
 
+def new_position():
+    if my_direction == UP:
+        snake.insert(0,  (snake[0][0], snake[0][1] - 10))
+    if my_direction == DOWN:
+        snake.insert(0, (snake[0][0], snake[0][1] + 10))
+    if my_direction == RIGHT:
+        snake.insert(0, (snake[0][0] + 10, snake[0][1]))
+    if my_direction == LEFT:
+        snake.insert(0, (snake[0][0] - 10, snake[0][1]))
+
+
 # Inicia o game
 pygame.init()  # inicio o pygame
 screen = pygame.display.set_mode((600, 600))  # Tamanho da tela
@@ -95,14 +106,7 @@ while True:
 
     snake.pop()
 
-    if my_direction == UP:
-        snake.insert(0,  (snake[0][0], snake[0][1] - 10))
-    if my_direction == DOWN:
-        snake.insert(0, (snake[0][0], snake[0][1] + 10))
-    if my_direction == RIGHT:
-        snake.insert(0, (snake[0][0] + 10, snake[0][1]))
-    if my_direction == LEFT:
-        snake.insert(0, (snake[0][0] - 10, snake[0][1]))
+    new_position()
 
     score_font = font.render('score: %s' % score, True, (155, 255, 255))
     score_rect = score_font.get_rect()
