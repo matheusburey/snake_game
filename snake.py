@@ -2,6 +2,18 @@ import pygame
 from random import randint
 from pygame.locals import *
 
+status = {
+        'snake':{
+            'length': [(200, 200), (210, 200), (220, 200)],  # Cobra inicial
+            'pixel_size':pygame.Surface((10, 10)),  # Tamanho de cada quadrado da cobra
+            'color_skin': ((255, 255, 255))  # cor da cobra: branca
+        },
+        'apple':{
+            'length': [(100, 100)],  # Calcula localização aleatoria
+            'pixel_size': pygame.Surface((10, 10)),  # Tamanho da maçã
+            'color_skin': ((255, 0, 0))   # Cor da maçã
+            }
+    }
 
 # funçoes
 # Retorna Posição aleatoria para maçã 
@@ -20,7 +32,7 @@ def collision(c1, c2):
 def print_snake(snake):
     screen.fill((0, 12, 0))
     for po in snake:
-        pygame.draw.rect(screen, white, [po[0], po[1], 10, 10])
+        pygame.draw.rect(screen, status['snake']['color_skin'], [po[0], po[1], 10, 10])
 
 
 # Desenha a maçã na tela
@@ -35,24 +47,24 @@ def click_key(key, my_direction):
             pygame.quit()
         if event.type == KEYDOWN:
             if event.key == K_UP:
-                my_direction = UP
+                my_direction = 'UP'
             if event.key == K_DOWN:
-                my_direction = DOWN
+                my_direction = 'DOWN'
             if event.key == K_LEFT:
-                my_direction = LEFT
+                my_direction = 'LEFT'
             if event.key == K_RIGHT:
-                my_direction = RIGHT
+                my_direction = 'RIGHT'
     return my_direction
 
 
-def new_position():
-    if my_direction == UP:
+def new_position(snake):
+    if my_direction == 'UP':
         snake.insert(0,  (snake[0][0], snake[0][1] - 10))
-    if my_direction == DOWN:
+    if my_direction == 'DOWN':
         snake.insert(0, (snake[0][0], snake[0][1] + 10))
-    if my_direction == RIGHT:
+    if my_direction == 'RIGHT':
         snake.insert(0, (snake[0][0] + 10, snake[0][1]))
-    if my_direction == LEFT:
+    if my_direction == 'LEFT':
         snake.insert(0, (snake[0][0] - 10, snake[0][1]))
 
 
@@ -61,52 +73,43 @@ pygame.init()  # inicio o pygame
 screen = pygame.display.set_mode((600, 600))  # Tamanho da tela
 pygame.display.set_caption('snake')  # Etiqueta do game
 
-# Snake
-snake = [(200, 200), (210, 200), (220, 200)]  # Cobra inicial
-sn_skin = pygame.Surface((10, 10))  # Tamanho de cada quadrado da cobra
-white = ((255, 255, 255))  # cor da cobra
-
 # maça
 apple_pos = on_grid_random()  # Calcula localização aleatoria
 apple = pygame.Surface((10, 10))  # Tamanho da maçã
 red = ((255, 0, 0))  # Cor da maçã
 
-# Direção
-UP = 0
-RIGHT = 1
-DOWN = 2
-LEFT = 3
-my_direction = LEFT  # Direção inicial
+my_direction = 'LEFT'  # Direção inicial
 font = pygame.font.Font('freesansbold.ttf', 18)  # Fonte
 clock = pygame.time.Clock()  # Tempo de atualização da tela por segundo
 score = 0   # Pontuaçao
+
 
 while True:
     pygame.display.update()
     clock.tick(10)
     
-    print_snake(snake)
+    print_snake(status['snake']['length'])
     print_aplle()
 
     my_direction = click_key(pygame.event.get(), my_direction)
 
-    if collision(snake[0], apple_pos):
+    if collision(status['snake']['length'][0], apple_pos):
         apple_pos = on_grid_random()
-        snake.append((0, 0))
+        status['snake']['length'].append((0, 0))
         score += 1
 
-    if snake[0][0] == 600 or snake[0][1] == 600 or snake[0][0] < 0 or snake[0][1] < 0:
+    if status['snake']['length'][0][0] == 600 or status['snake']['length'][0][1] == 600 or status['snake']['length'][0][0] < 0 or status['snake']['length'][0][1] < 0:
         break
 
-    if snake[0] in snake[1:]:
+    if status['snake']['length'][0] in status['snake']['length'][1:]:
         break
 
-    for i in range(len(snake)-1, 0, -1):
-        snake[i] = (snake[i-1][0], snake[i-1][1])
+    for i in range(len(status['snake']['length'])-1, 0, -1):
+        status['snake']['length'][i] = (status['snake']['length'][i-1][0], status['snake']['length'][i-1][1])
 
-    snake.pop()
+    status['snake']['length'].pop()
 
-    new_position()
+    new_position(status['snake']['length'])
 
     score_font = font.render('score: %s' % score, True, (155, 255, 255))
     score_rect = score_font.get_rect()
@@ -126,3 +129,4 @@ while True:
             if event.type == QUIT:
                 pygame.quit()
                 exit()
+
