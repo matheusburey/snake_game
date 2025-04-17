@@ -1,2 +1,3 @@
 # Snake
- Jogo da snake feito em python
+
+create a snake game in multiple languages
